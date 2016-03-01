@@ -16,11 +16,14 @@ adds point (x, y, z) to points and increment points.lastcol
 if points is full, should call grow on points
 ====================*/
 void add_point( struct matrix * points, int x, int y, int z) {
-  int i = 0;
-  int j = 0;
-  for(i=0;i<points.cols){
-    double loop till you get to the end then add xyz then do the thing in the descrption
-
+  if(points->lastcol = points->cols){
+    grow_matrix(points, points->cols + 10);
+  }
+  points->lastcol += 1;
+  points->points[0][lastcol]=x;
+  points->points[1][lastcol]=y;
+  points->points[2][lastcol]=z;
+  points->points[3][lastcol]=1;
 }
 
 /*======== void add_edge() ==========
@@ -34,7 +37,95 @@ void add_edge( struct matrix * points,
 	       int x0, int y0, int z0, 
 	       int x1, int y1, int z1) {
   
+  int x, y, d, dx, dy, z;
+  z = 1;
+  x = x0;
+  y = y0;
+  //swap points so we're always draing left to right
+  if ( x0 > x1 ) {
+    x = x1;
+    y = y1;
+    x1 = x0;
+    y1 = y0;
+  }
+  //need to know dx and dy for this version
+  dx = (x1 - x) * 2;
+  dy = (y1 - y) * 2;
+  //positive slope: Octants 1, 2 (5 and 6)
+  if ( dy > 0 ) {
+    //slope < 1: Octant 1 (5)
+    if ( dx > dy ) {
+      d = dy - ( dx / 2 );
+      while ( x <= x1 ) {
+	//ADD X AND Y TO THE MATRIX
+	add_point(points,x, y, z);
+	if ( d < 0 ) {
+	  x = x + 1;
+	  d = d + dy;
+	}
+	else {
+	  x = x + 1;
+	  y = y + 1;
+	  d = d + dy - dx;
+	}
+      }
+    }
+    //slope > 1: Octant 2 (6)
+    else {
+      d = ( dy / 2 ) - dx;
+      while ( y <= y1 ) {
+	//ADD X AND Y TO THE MATRIX
+	add_point(points,x, y, z);
+	if ( d > 0 ) {
+	  y = y + 1;
+	  d = d - dx;
+	}
+	else {
+	  y = y + 1;
+	  x = x + 1;
+	  d = d + dy - dx;
+	}
+      }
+    }
+  }
+  //negative slope: Octants 7, 8 (3 and 4)
+  else {
+    //slope > -1: Octant 8 (4)
+    if ( dx > abs(dy) ) {
+      d = dy + ( dx / 2 );
+      while ( x <= x1 ) {
+	//ADD X AND Y TO THE MATRIX
+	if ( d > 0 ) {
+	  x = x + 1;
+	  d = d + dy;
+	}
+	else {
+	  x = x + 1;
+	  y = y - 1;
+	  d = d + dy + dx;
+	}
+      }
+    }
+    //slope < -1: Octant 7 (3)
+    else {
+      d = (dy / 2) + dx;
+      while ( y >= y1 ) {
+	//ADD X AND Y TO THE MATRIX
+	add_point(points,x, y, z);
+	if ( d < 0 ) {
+	  y = y - 1;
+	  d = d + dx;
+	}
+	else {
+	  y = y - 1;
+	  x = x + 1;
+	  d = d + dy + dx;
+	}
+      }
+    }
+  }
 }
+
  
 
 /*======== void draw_lines() ==========
@@ -56,7 +147,7 @@ void draw_line(int x0, int y0, int x1, int y1, screen s, color c) {
   x = x0;
   y = y0;
   
-  //swap points so we're always draing left to right
+  //swap points so we're always drawing left to right
   if ( x0 > x1 ) {
     x = x1;
     y = y1;
