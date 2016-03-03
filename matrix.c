@@ -77,8 +77,14 @@ Returns:
 print the matrix
 */
 void print_matrix(struct matrix *m) {
+  int i;
+  int j;
+  for(i=0;i<m->rows;i++){
+    for(j=0;j<m->lastcol;j++){
+      printf("%d\n",m->m[i][j]);
+    }
+  }
 }
-
 /*-------------- void ident() --------------
 Inputs:  struct matrix *m <-- assumes m is a square matrix
 Returns: 
@@ -86,8 +92,19 @@ Returns:
 turns m in to an identity matrix
 */
 void ident(struct matrix *m) {
+  int i;
+  int j;
+  for(i=0;i<m->rows;i++){
+    for(j=0;j<m->lastcol;j++){
+      if( i==j){
+	m->m[i][j] = 1;
+      }
+      else{
+	m->m[i][j] = 0;
+      }
+    }
+  }
 }
-
 
 /*-------------- void scalar_mult() --------------
 Inputs:  double x
@@ -97,6 +114,13 @@ Returns:
 multiply each element of m by x
 */
 void scalar_mult(double x, struct matrix *m) {
+  int i;
+  int j;
+  for(i=0;i<rows;i++){
+    for(j=0;j<m->lastcol;j++){
+      m->m[i][j] = x*(m->m[i][j])
+    }
+  }
 }
 
 
@@ -108,6 +132,8 @@ Returns:
 a*b -> b
 */
 void matrix_mult(struct matrix *a, struct matrix *b) {
+
+
 }
 
 
