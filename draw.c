@@ -16,14 +16,14 @@ adds point (x, y, z) to points and increment points.lastcol
 if points is full, should call grow on points
 ====================*/
 void add_point( struct matrix * points, int x, int y, int z) {
-  if(points->lastcol = points->cols){
+  if(points->lastcol == points->cols){
     grow_matrix(points, points->cols + 10);
   }
   points->lastcol += 1;
-  points->points[0][lastcol]=x;
-  points->points[1][lastcol]=y;
-  points->points[2][lastcol]=z;
-  points->points[3][lastcol]=1;
+  points->points[0][points->lastcol]=x;
+  points->points[1][points->lastcol]=y;
+  points->points[2][points->lastcol]=z;
+  points->points[3][points->lastcol]=1;
 }
 
 /*======== void add_edge() ==========
